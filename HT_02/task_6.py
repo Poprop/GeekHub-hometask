@@ -5,4 +5,4 @@
 test_list = [1, 2, 'u', 'a', 4, True]
 converted_list = list(map(str, test_list))
 while True:
-    print(input() in converted_list)
+    print(input("Please input element for check if it in collection") in converted_list)
