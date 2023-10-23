@@ -10,7 +10,6 @@ while await_number is None or isinstance(await_number, str):
     except ValueError:
         print("Please print int number not str or float")
 
-
 print(f"Nice your number is {await_number}, lets make some magic")
 results = {}
 for i in range(await_number):
