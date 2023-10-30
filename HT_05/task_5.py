@@ -19,7 +19,7 @@ def calculator():
             '//': lambda x, y: x // y if y != 0 else "Floor division by zero is not allowed.",
             '**': lambda x, y: x ** y
         }
-        result = operations.get(operation, lambda x, y: "You enter invalid opperation try next "
+        result = operations.get(operation, lambda x, y: "You enter invalid operation try next "
                                                         "time use one of this opperation:\n+ addition\n- subtraction\n"
                                                         "* multiply\n/ division\n% remainder from division\n"
                                                         "// floor division\n** squaring")(number_1, number_2)
