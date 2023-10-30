@@ -21,8 +21,8 @@ def calculator():
         }
         result = operations.get(operation, lambda x, y: "You enter invalid operation try next "
                                                         "time use one of this opperation:\n+ addition\n- subtraction\n"
-                                                        "* multiply\n/ division\n% remainder from division\n"
-                                                        "// floor division\n** squaring")(number_1, number_2)
+                                                        "* multiply\n/ division\n% modulus\n"
+                                                        "// floor division\n** exponentiation")(number_1, number_2)
 
         return (f"{number_1} {operation} {number_2} = {result}")
 
