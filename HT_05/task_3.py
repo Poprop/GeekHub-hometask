@@ -4,7 +4,9 @@
     x < y;       вiдповiдь - "у бiльше нiж х на z"
     x == y.      вiдповiдь - "х дорiвнює z" """
 
+
 def x_vs_y(x, y):
+    x, y = int(x), int(y)
     if x > y:
         z = x - y
         return f" x > y на {z}"
@@ -16,4 +18,5 @@ def x_vs_y(x, y):
         return f" x дорівнює y - {z}"
 
 
-print(x_vs_y(int(input("Enter 'x' int value ")), int(input("Enter 'y' int value "))))
+print(x_vs_y(x=input("Enter 'x' int value "),
+             y=input("Enter 'y' int value ")))

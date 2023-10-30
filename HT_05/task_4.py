@@ -9,15 +9,14 @@ import re
 
 
 def task(string):
-    print(len(string))
-    if 30 < len(string) < 50:
-        let = len([i for i in string if i.isdigit()])
-        nums = len(re.findall(r'\d+', string))
-        return (f"Ammount of letters is {let},\nnumbers - {nums}")
+    if 30 <= len(string) <= 50:
+        letters = len([i for i in string if i.isdigit()])
+        numbers = len(re.findall(r'[A-Za-zА-Яа-я]', string))
+        return (f"Your string which lenght is {len(string)} has: \n{letters} letters\n{numbers} numbers")
 
     if len(string) < 30:
         summary = (re.findall(r'\d+', string))
-        new_string = "".join(re.findall(r'\D+', string))
+        new_string = "".join(re.findall(r'[A-Za-zА-Яа-я]', string))
 
         return f"Cума всіх чисел {summary} рядка - {sum(map(int, summary))},\nлітери з рядка - {new_string}"
     if len(string) > 50:
@@ -32,4 +31,4 @@ def task(string):
                f"кількість повторів літер {dict(collections.Counter(alph_list))}"
 
 
-print(task("f98neroi4nr0c3n30irn03ien3c0"))
+print(task("feroi334324укewdew224241  апукс22іeпепек о en3c0"))
