@@ -10,8 +10,8 @@ import re
 
 def task(string):
     if 30 <= len(string) <= 50:
-        letters = len([i for i in string if i.isdigit()])
-        numbers = len(re.findall(r'[A-Za-zА-Яа-я]', string))
+        numbers = len([i for i in string if i.isdigit()])
+        letters = len(re.findall(r'[A-Za-zА-Яа-я]', string))
         return (f"Your string which lenght is {len(string)} has: \n{letters} letters\n{numbers} numbers")
 
     if len(string) < 30:
