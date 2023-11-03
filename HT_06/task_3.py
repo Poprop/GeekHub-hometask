@@ -2,7 +2,7 @@
 и яка вертатиме True, якщо це число просте і False - якщо ні."""
 
 
-def is_prime(number):
+def is_prime(number)->bool:
     if number <= 0:
         return False
     for i in range(2, number):
@@ -10,5 +10,5 @@ def is_prime(number):
             return False
     return True
 
-
-print(is_prime(int(input("Enter your number: "))))
+if __name__ == "__main__":
+    print(is_prime(int(input("Enter your number: "))))

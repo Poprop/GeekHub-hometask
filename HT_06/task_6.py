@@ -6,17 +6,13 @@
    fnc([1, 2, 3, 4, 5], shift=-2) --> [3, 4, 5, 1, 2]"""
 
 
-def shift_func(nums, shift):
-    if len(nums) >= shift:
-        return nums[-shift:] + nums[:-shift]
-    if len(nums) <= shift:
-        print("Dude, I asked you to enter less number for the bottom of the list, now I need to write even more code.\n"
-              "That is your result , but next time try to play on the rules")
-        shift = shift % len(nums)
-        return nums[-shift:] + nums[:-shift]
+def shift_func(nums, shift) -> list:
+    shift = shift % len(nums)
+    return nums[-shift:] + nums[:-shift]
 
 
 nums_list = [int(i) for i in
              input("Enter numbers in one string using 'Space' button and finish by 'Enter' button: ").split()]
-shift_value = (int(input("Enter shift value , but try to chose value less then amount of entered numbers in list: ")))
-print(shift_func(nums_list, shift_value))
+shift_value = (int(input("Enter shift value: ")))
+if __name__ == "__main__":
+    print(shift_func(nums_list, shift_value))

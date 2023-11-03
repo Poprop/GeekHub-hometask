@@ -5,12 +5,14 @@
 рахунку, а також її повернути (але округлену до копійок)."""
 
 
-def bank(amount, years, percents=0.1):
-    result = amount
+def bank(amount, years, percents=0.1) -> int:
+    result: int = amount
     while years > 0:
         years -= 1
         result += result * (percents / 100)
     return round(result, 2)
 
 
-print(bank(int(input("Enter start capital: ")), int(input("Enter period: ")), int(input("Enter custom percents: "))))
+if __name__ == "__main__":
+    print(
+        bank(int(input("Enter start capital: ")), int(input("Enter period: ")), int(input("Enter custom percents: "))))

@@ -3,10 +3,14 @@
 import math
 
 
-def square(side):
-    perimetr = side * 4
-    area = side ** 2
-    diagonal = side * math.sqrt(2)
-    return(perimetr,area,diagonal)
+def square(side) -> int:
+    perimetr: int = side * 4
+    area: int = side ** 2
+    diagonal: int = side * math.sqrt(2)
+    return perimetr, area, diagonal
 
-print(square(int(input("Enter the square side value:  "))))
+
+if __name__ == "__main__":
+    side_value: int = int(input("Enter the square side value:  "))
+    perimetr, area, diagonal = square(side_value)
+    print(f"Perimetr is {perimetr}\narea is {area}\ndiagonal is {int(diagonal)}")
