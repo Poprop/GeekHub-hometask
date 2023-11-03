@@ -19,8 +19,8 @@ def prime_list(start, finish) -> list:
 
 if __name__ == "__main__":
     try:
-        first_num = input("enter first number: ")
-        second_number = input("enter second number: ")
-        print(prime_list(int(first_num), int(second_number)))
+        first_num: int = int(input("enter first number: "))
+        second_number: int = int(input("enter second number: "))
+        print(prime_list(first_num, second_number))
     except ValueError:
         print("One of your values is not valid ,please try again input integer values")

@@ -7,12 +7,16 @@
 
 
 def shift_func(nums, shift) -> list:
-    shift = shift % len(nums)
+    shift: int = shift % len(nums)
     return nums[-shift:] + nums[:-shift]
 
 
-nums_list = [int(i) for i in
-             input("Enter numbers in one string using 'Space' button and finish by 'Enter' button: ").split()]
-shift_value = (int(input("Enter shift value: ")))
+
 if __name__ == "__main__":
-    print(shift_func(nums_list, shift_value))
+    try:
+        nums_list:list = [int(i) for i in
+                     input("Enter numbers in one string using 'Space' button and finish by 'Enter' button: ").split()]
+        shift_value:int = (int(input("Enter shift value: ")))
+        print(shift_func(nums_list, shift_value))
+    except Exception as e:
+        print(f"Something in your input is wrong {e}")
