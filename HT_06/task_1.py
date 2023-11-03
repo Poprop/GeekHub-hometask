@@ -16,4 +16,4 @@ if __name__ == "__main__":
         perimetr, area, diagonal = square(side_value)
         print(f"Perimetr is {perimetr}\narea is {area}\ndiagonal is {int(diagonal)}")
     except Exception as e:
-        print(f"You enter incorect information {e} , need int instead")
+        print(f"You enter incorrect information {e} , need int instead")
