@@ -5,7 +5,7 @@
 рахунку, а також її повернути (але округлену до копійок)."""
 
 
-def bank(amount, years, percents=0.1) -> str:
+def bank(amount: int, years: int, percents: int = 10) -> str:
     result: int = amount
     while years > 0:
         years -= 1
@@ -18,7 +18,7 @@ if __name__ == "__main__":
         amount: int = int(input("Enter amount of money "))
         years: int = int(input("Enter period of time "))
         percents: int = int(input("Enter percents for deposit "))
-        print(bank(amount, years, percents))
     except Exception as e:
         print(f"Ooops smth go wrong in your input :"
               f"{e} \ntry enter valid information next time ")
+    print(bank(amount, years, percents))

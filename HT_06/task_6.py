@@ -6,17 +6,17 @@
    fnc([1, 2, 3, 4, 5], shift=-2) --> [3, 4, 5, 1, 2]"""
 
 
-def shift_func(nums, shift) -> list:
+def shift_func(nums: int, shift: int) -> list:
     shift: int = shift % len(nums)
     return nums[-shift:] + nums[:-shift]
 
 
-
 if __name__ == "__main__":
     try:
-        nums_list:list = [int(i) for i in
-                     input("Enter numbers in one string using 'Space' button and finish by 'Enter' button: ").split()]
-        shift_value:int = (int(input("Enter shift value: ")))
-        print(shift_func(nums_list, shift_value))
+        nums_list: list = [int(i) for i in
+                           input(
+                               "Enter numbers in one string using 'Space' button and finish by 'Enter' button: ").split()]
+        shift_value: int = (int(input("Enter shift value: ")))
     except Exception as e:
         print(f"Something in your input is wrong {e}")
+    print(shift_func(nums_list, shift_value))

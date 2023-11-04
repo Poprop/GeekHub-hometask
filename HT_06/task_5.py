@@ -2,7 +2,7 @@
 # і виводить всі числа Фібоначчі, що не перевищують його.
 
 
-def fibonacci(n) -> list:
+def fibonacci(n: int) -> list:
     fibonacci_nums = [1]
     x1, x2 = 1, 1
     while x2 <= n:
@@ -13,7 +13,7 @@ def fibonacci(n) -> list:
 
 if __name__ == "__main__":
     try:
-        number:int=int(input("Enter your maximum fibonacci number: "))
-        print(fibonacci(number))
+        number: int = int(input("Enter your maximum fibonacci number: "))
     except Exception as e:
         print(f"You make mistake {e}")
+    print(fibonacci(number))

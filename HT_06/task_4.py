@@ -3,7 +3,7 @@
 - виведіть повідомлення."""
 
 
-def prime_list(start, finish) -> list:
+def prime_list(start: int, finish: int) -> list:
     prime_nums = []
     for num in range(start, finish + 1):
         if num > 1:
@@ -21,6 +21,6 @@ if __name__ == "__main__":
     try:
         first_num: int = int(input("enter first number: "))
         second_number: int = int(input("enter second number: "))
-        print(prime_list(first_num, second_number))
     except ValueError:
         print("One of your values is not valid ,please try again input integer values")
+    print(prime_list(first_num, second_number))

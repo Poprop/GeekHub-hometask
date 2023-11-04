@@ -2,7 +2,7 @@
 і виводить результат. Елементами списку можуть бути дані будь-яких типів."""
 
 
-def counter_func(entered_list) -> str:
+def counter_func(entered_list: list) -> str:
     counter: dict = {}
     for el in entered_list:
         if isinstance(el, (list, bool)):
