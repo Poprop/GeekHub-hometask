@@ -19,15 +19,18 @@ def morse_decoder(morse_input: str) -> str:
              '...--', '....-', '.....', '-....', '--...', '---..', '----.']
     morse_alphabet = dict(zip(morse, letters))
     morse_alphabet["...---..."] = "SOS"  # або в ручну прописувати словник , або костиль
-    decoded_text = ""
+
     morse_separated_words = morse_input.strip().split("   ")
-    for letter_codes in morse_separated_words:
-        morse_letters = letter_codes.split()
+    decoded_words = []
+    for word in morse_separated_words:
+        morse_letters = word.split()
+        decoded_word = ""
         for letter in morse_letters:
             if letter in morse_alphabet:
-                decoded_text += morse_alphabet[letter]
-        decoded_text += " "
-    return decoded_text.strip()
+                decoded_word += morse_alphabet[letter]
+        decoded_words.append(decoded_word)
+    decoded_text = " ".join(decoded_words)
+    return decoded_text
 
 
 if __name__ == "__main__":
