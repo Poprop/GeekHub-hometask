@@ -11,29 +11,28 @@
    P.P.P.S Не забудьте обробляти невалідні ситуації (аналог range(1, -10, 5)). Подивіться як веде себе стандартний range в таких випадках."""
 
 
-def my_range(start: int, end: int, step: int = 1) -> int:
-    if step > 0 and end > start:
-        i = start
-        while i < end:
-            yield i
-            i += step
-    elif step < 0 and end < start:
-        i = start
-        while i > end:
-            yield i
-            i += step
-    else:
-        return iter(())
+def my_range(end, start=0, step=1):
+    current = start
+    while current < end:
+        yield current
+        current += step
 
 
 if __name__ == "__main__":
-    start = int(input("Enter start of iteration: "))
-    stop = int(input("Enter end of iteration: "))
-    step = int(input("Enter step of iteration: "))
+    end = int(input("Enter end of iteration: "))
+    try:
+        start = int(input("Enter start of iteration: "))
+    except ValueError:
+        start = 0
 
-    a = my_range(start, stop, step)
+    try:
+        step = int(input("Enter step of iteration: "))
+    except ValueError:
+        step = 1
+
+    a = my_range(end, start, step)
 try:
-    for i in range(stop + 1):
-        print(next(a))
+    for i in a:
+        print(i)
 except StopIteration:
     print("В ітераторі не залишилось елементів")
