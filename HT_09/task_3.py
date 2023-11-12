@@ -25,7 +25,7 @@ import csv
 import os.path
 import json
 
-path_4_files = "C:\\Users\\ILLIA\\PycharmProjects\\GeekHub hometask\\HT_09\\task_3_files"
+path_4_files = f"{os.getcwd()}\\task_3_files"
 if not os.path.exists(path_4_files):
     os.makedirs(path_4_files)
 os.chdir(path_4_files)
@@ -38,7 +38,7 @@ start_balance_info = [("Oleg", 25000),
                       ("Ilona", 5000),
                       ("Vasia", 50000),
                       ("Dmytro", 10000)]
-file_csv_name = "Names&passwords,csv"
+file_csv_name = "Names&passwords.csv"
 with open(file_csv_name, "w", newline="", encoding="utf-8") as csv_file:
     csv_writer = csv.writer(csv_file)
     csv_writer.writerows(users)
@@ -59,17 +59,31 @@ class ATM:
         self.transaction = self.load_transaction(transaction_path)
         self.current_user = None
 
+    def save_changes(self, users_file, balances_path, transactions_file):
+
+        with open(users_file, 'w', newline='', encoding='utf-8') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerows([[user, password] for user, password in self.users.items()])
+
+        for user, balance in self.balance.items():
+            with open(os.path.join(balances_path, f"{user}_balance.txt"), 'w', encoding='utf-8') as balance_file:
+                balance_file.write(str(balance))
+
+        with open(transactions_file, 'w', encoding='utf-8') as json_file:
+            json.dump(self.transaction, json_file, indent=4)
     def load_users(self, user_info_path):
-        with open(user_info_path, "r+", encoding="utf-8") as csv_file:
+        with open(user_info_path, "r", encoding="utf-8") as csv_file:
             csv_reader = csv.reader(csv_file)
-            return {row[0]: row[1] for row in csv_file}
+            users_data = {row[0]: row[1] for row in csv_reader}
+        return users_data
 
     def load_balances(self, user_balance_path):
         balances = {}
         for user_balance_file in os.listdir(user_balance_path):
             if user_balance_file.endswith("_balance.txt"):
                 user = user_balance_file.split("_")[0]
-                with open(os.path.join(user_balance_path, user), "r+", encoding="utf-8") as balance_txt_file:
+                with open(os.path.join(user_balance_path, user + "_balance.txt"), "r+",
+                          encoding="utf-8") as balance_txt_file:
                     balance = int(balance_txt_file.read())
                     balances[user] = balance
         return balances
@@ -88,6 +102,7 @@ class ATM:
     def logout(self):
         self.current_user = None
         print("You have logged out from the system")
+
 
     def start(self, choice):
         while True:
@@ -120,7 +135,7 @@ class ATM:
                 print(f"{key} <-------- {value}")
             choice = input("Your choice is : ")
             if choice in menu_options:
-                getattr(self, menu_options[choice])()
+                getattr(self, menu_options[choice])
             else:
                 print("Invalid option , try again")
 
@@ -156,7 +171,8 @@ class ATM:
                 print(f"There is not enough money on your balance")
 
 
-users_info_path = "C:\\Users\\ILLIA\\PycharmProjects\\GeekHub hometask\\HT_09\\task_3_files\\Names&passwords,csv"
-user_balance_path = "C:\\Users\\ILLIA\\PycharmProjects\\GeekHub hometask\\HT_09\\task_3_files"
-users_transactions_path = "C:\\Users\\ILLIA\\PycharmProjects\\GeekHub hometask\\HT_09\\task_3_files\\transaction.json"
+users_info_path = f"{path_4_files}\\Names&passwords.csv"
+user_balance_path = f"{path_4_files}"
+users_transactions_path = f"{path_4_files}\\transaction.json"
 atm = ATM(users_info_path, user_balance_path, users_transactions_path)
+atm.start(1)
