@@ -25,7 +25,7 @@ import csv
 import os.path
 import json
 
-path_4_files = f"{os.getcwd()}\\task_3_files"
+path_4_files = os.path.join(os.getcwd(), 'task_3_files')
 if not os.path.exists(path_4_files):
     os.makedirs(path_4_files)
 os.chdir(path_4_files)
@@ -160,7 +160,7 @@ class ATM:
 
     def check_balance(self, account_name: str):
         if account_name in self.balance:
-            print(self.balance[account_name])
+            print(f"Your balance is {self.balance[account_name]}")
         else:
             print(f"Account {account_name} not exists")
 
@@ -190,8 +190,8 @@ class ATM:
                 print(f"There is not enough money on your balance")
 
 
-users_info_path = f"{path_4_files}\\Names&passwords.csv"
-user_balance_path = f"{path_4_files}"
-users_transactions_path = f"{path_4_files}\\transaction.json"
+users_info_path = os.path.join(path_4_files, 'Names&passwords.csv')
+user_balance_path = os.path.join(path_4_files,)
+users_transactions_path = os.path.join(path_4_files,"transaction.json")
 atm = ATM(user_balance_path, users_info_path, users_transactions_path)
 atm.start()
