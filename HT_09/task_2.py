@@ -10,7 +10,7 @@ x = f"Написати функцію, яка приймає два параме
 #         f.write(el + "\n")
 
 
-def process_file(file_name, block_size):
+def process_file(file_name: str, block_size: int) -> list:
     try:
         with open(file_name, 'r', encoding='utf-8') as file:
             content = file.read().replace('\n', '')
@@ -21,9 +21,8 @@ def process_file(file_name, block_size):
 
             middle = total_chars // 2
 
-
             start_block = content[:block_size]
-            middle_block=content[middle-(block_size//2):middle+(block_size//2)+1]
+            middle_block = content[middle - (block_size // 2):middle + (block_size // 2) + 1]
             end_block = content[-block_size:]
 
             return [start_block, middle_block, end_block]
@@ -34,9 +33,8 @@ def process_file(file_name, block_size):
         print(f"Виникла помилка: {e}")
 
 
-file_name = "example.txt"
-block_size = 3
-blocks = process_file(file_name, block_size)
-print(blocks)
-
-
+if __name__ == "__main__":
+    file_name = "example.txt"
+    block_size: int = 3
+    blocks = process_file(file_name, block_size)
+    print(blocks)
