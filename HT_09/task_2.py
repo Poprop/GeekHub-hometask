@@ -4,9 +4,10 @@ x = f"Написати функцію, яка приймає два параме
     f"коли кількість символів більша, ніж є в файлі або, наприклад, файл із двох символів і треба вивести по одному символу," \
     f"то що виводити на місці середнього блоку символів?). Не забудьте додати перевірку чи файл існує."
 
-with open("example.txt", "w", encoding="utf-8") as f:
-    for el in x.split():
-        f.write(el + "\n")
+
+# with open("example.txt", "w", encoding="utf-8") as f:
+#     for el in x.split():
+#         f.write(el + "\n")
 
 
 def process_file(file_name, block_size):
@@ -22,7 +23,7 @@ def process_file(file_name, block_size):
             half_block_size = block_size // 2
 
             start_block = content[:block_size]
-            middle_block = content[middle - half_block_size: middle + half_block_size]
+            middle_block=content[middle-(block_size//2):middle+(block_size//2)+1]
             end_block = content[-block_size:]
 
             return [start_block, middle_block, end_block]
@@ -34,6 +35,8 @@ def process_file(file_name, block_size):
 
 
 file_name = "example.txt"
-block_size = 5
+block_size = 3
 blocks = process_file(file_name, block_size)
 print(blocks)
+
+
