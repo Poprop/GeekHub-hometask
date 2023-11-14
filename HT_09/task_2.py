@@ -20,7 +20,7 @@ def process_file(file_name, block_size):
                 raise ValueError("Кількість символів перевищує загальну кількість символів у файлі.")
 
             middle = total_chars // 2
-            half_block_size = block_size // 2
+
 
             start_block = content[:block_size]
             middle_block=content[middle-(block_size//2):middle+(block_size//2)+1]
