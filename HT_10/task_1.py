@@ -208,6 +208,7 @@ def get_integer_input(prompt):
             print("Invalid input. Please enter a valid integer.")
 
 
-db_path = os.path.join(os.getcwd(), 'atm_database.db')
-atm = ATM(db_path)
-atm.start()
+if __name__ == "__main__":
+    db_path = os.path.join(os.getcwd(), 'atm_database.db')
+    atm = ATM(db_path)
+    atm.start()
