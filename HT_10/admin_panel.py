@@ -49,7 +49,7 @@ class AdminATM:
             total = sum(row[1] * row[2] for row in rows)
             for row in rows:
                 print(f"In ATM there are {row[1]} ----> {row[2]} bills")
-                print(f"The total amount of money in the ATM - {total}")
+            print(f"The total amount of money in the ATM - {total}")
             return total
 
     def check_total_bank_for_user_funks(self):
@@ -91,7 +91,14 @@ class AdminATM:
         while True:
             try:
                 denomination = int(input("Enter the denomination: "))
+                if denomination not in [10,20,50,100,200,500,100]:
+                    print("You enter wrong denomination")
+                    self.deposit_bills()
                 num_of_bills = int(input(f"Enter the amount of {denomination} bills: "))
+                if num_of_bills < 0:
+                    print("Amount of bills can`t be negative number")
+                    self.deposit_bills()
+
                 break
             except ValueError:
                 print("Invalid input. Please enter a valid integer.")
