@@ -99,7 +99,7 @@ class ATM:
 
         def login_creation():
             while True:
-                new_acc_inp = input("Enter your login: ").strip()
+                new_acc_inp = input("Enter your login: ").strip().capitalize()
                 if not new_acc_inp.isalpha():
                     print("Your login can contain only alphabet letters, try again")
                 else:
