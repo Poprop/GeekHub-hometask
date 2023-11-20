@@ -155,7 +155,11 @@ class ATM:
 
     def deposit(self):
         with self.conn:
-            amount = get_integer_input("Enter the amount of deposit: ")
+            while amount <= 0:
+                amount = get_integer_input("Enter the amount of deposit: ")
+                if amount < 0:
+                    print("Enter number greater than 0")
+
             change = None
             if amount % 10 != 0:
                 change = amount % 10
