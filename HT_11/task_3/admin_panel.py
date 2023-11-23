@@ -28,7 +28,8 @@ class AdminATM:
             menu_options = {
                 '1': 'check_total_bank_balance',
                 '2': 'deposit_bills',
-                '3': 'admin_logout'
+                '3': 'withdraw_bills',
+                '4': 'admin_logout'
             }
             print("ATM menu, choose one of these actions by entering a number: ")
             for key, value in menu_options.items():
@@ -86,6 +87,45 @@ class AdminATM:
 
             self.conn.commit()
 
+    def withdraw_bills(self):
+        print("You enter the bills withdraw menu , enter the denomination of bills and amount ")
+        while True:
+            try:
+                denomination = int(input("Enter the denomination: "))
+                if denomination not in [10, 20, 50, 100, 200, 500, 1000]:
+                    print("You enter wrong denomination")
+                    continue
+                num_of_bills = int(input(f"Enter the amount of {denomination} bills: "))
+                if num_of_bills < 0:
+                    print("Amount of bills can`t be negative number")
+                    continue
+                with self.conn:
+                    cur = self.conn.cursor()
+                    cur.execute("""SELECT quantity FROM bills_inventory WHERE nominal = ?""", (denomination,))
+                    result = cur.fetchone()
+                    if result and result[0] >= num_of_bills:
+                        cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
+                                    (num_of_bills, denomination))
+                        print(f"Successfully withdrawed {num_of_bills} bills of {denomination} UAH.")
+                    else:
+                        print(f"Sorry but in ATM there are only {result[0]} {denomination} bills , choose next action:\n1<--------withdraw all "
+                              f"bills of this denomination \n2<--------change amount")
+                        decision = input("Enter your action:")
+                        if decision == "1":
+                            cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
+                                        (result[0] if result else 0, denomination))
+                            print(f"Congratulations you withdraws {result[0]} {denomination} bills")
+                        elif decision == "2":
+                            print("You choose reentering to withdraw menu")
+                            continue
+                        else:
+                            print("You printed wrong symbols")
+                            continue
+
+                    break
+            except ValueError:
+                print("Invalid input. Please enter a valid integer.")
+
     def deposit_bills(self):
         print("You enter the bills deposit menu, enter the amount of bills you want to add: ")
         while True:
@@ -93,7 +133,6 @@ class AdminATM:
                 denomination = int(input("Enter the denomination: "))
                 if denomination not in [10, 20, 50, 100, 200, 500, 1000]:
                     print("You enter wrong denomination")
-                    self.deposit_bills()
                     continue
                 num_of_bills = int(input(f"Enter the amount of {denomination} bills: "))
                 if num_of_bills < 0:
