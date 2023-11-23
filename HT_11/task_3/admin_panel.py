@@ -91,22 +91,23 @@ class AdminATM:
         while True:
             try:
                 denomination = int(input("Enter the denomination: "))
-                if denomination not in [10,20,50,100,200,500,100]:
+                if denomination not in [10, 20, 50, 100, 200, 500, 1000]:
                     print("You enter wrong denomination")
                     self.deposit_bills()
+                    continue
                 num_of_bills = int(input(f"Enter the amount of {denomination} bills: "))
                 if num_of_bills < 0:
                     print("Amount of bills can`t be negative number")
-                    self.deposit_bills()
+                    continue
 
-                break
+                with self.conn:
+                    cur = self.conn.cursor()
+                    cur.execute("""UPDATE bills_inventory SET quantity = quantity + ? WHERE nominal = ?""",
+                                (num_of_bills, denomination))
+                    print(f"Successfully deposited {num_of_bills} bills of {denomination} UAH.")
+                    break
             except ValueError:
                 print("Invalid input. Please enter a valid integer.")
-
-        with self.conn:
-            cur = self.conn.cursor()
-            cur.execute("""UPDATE bills_inventory SET quantity = quantity + ? WHERE nominal = ?""",
-                        (num_of_bills, denomination))
 
     def admin_logout(self):
         self.current_user = None

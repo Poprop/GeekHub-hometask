@@ -191,7 +191,7 @@ class ATM:
 
 
 users_info_path = os.path.join(path_4_files, 'Names&passwords.csv')
-user_balance_path = os.path.join(path_4_files,)
-users_transactions_path = os.path.join(path_4_files,"transaction.json")
+user_balance_path = os.path.join(path_4_files, )
+users_transactions_path = os.path.join(path_4_files, "transaction.json")
 atm = ATM(user_balance_path, users_info_path, users_transactions_path)
 atm.start()
