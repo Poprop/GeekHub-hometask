@@ -13,33 +13,38 @@
 
 class Calc:
     def __init__(self):
-        self.last_result = None
+        self.result_list = [None, None]
 
     def addition(self, x, y):
         result = x + y
-        self.last_result = result
+        self.result_list.append(result)
+        self.result_list = self.result_list[1:]
         return f"{x} + {y}"
-
 
     def subtraction(self, x, y):
         result = x - y
-        self.last_result = result
+        self.result_list.append(result)
+        self.result_list = self.result_list[1:]
         return f"{x} - {y}"
 
-
     def division(self, x, y):
-        result = x / y
-        self.last_result = result
-        return f"{x} / {y}"
-
-
-    def multiplication(self, x, y):
         try:
-            result = x * y
-            self.last_result = result
-            return f"{x} * {y}"
+            result = x / y
+            self.result_list.append(result)
+            self.result_list = self.result_list[1:]
+            return f"{x} / {y}"
         except ZeroDivisionError:
             print("Cant divide by 0 ")
+
+    def multiplication(self, x, y):
+        result = x * y
+        self.result_list.append(result)
+        self.result_list = self.result_list[1:]
+        return f"{x} * {y}"
+
+    @property
+    def last_result(self):
+        return self.result_list[0]
 
 
 calc = Calc()
@@ -49,3 +54,4 @@ print(calc.last_result)
 print(calc.multiplication(2, 3))
 print(calc.last_result)
 print(calc.multiplication(3, 4))
+print(calc.last_result)
