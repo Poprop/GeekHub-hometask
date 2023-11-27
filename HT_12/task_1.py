@@ -208,8 +208,10 @@ class ATM:
                     combinations = self.generate_combinations(amount, self.denominations,
                                                                   self.check_denominations())
                     best_combination = self.best_combination(combinations)
+                    
 
                     if best_combination is not None:
+                        print(best_combination)
                         for denomination, count in best_combination.items():
                             cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
                                             (count, denomination))
@@ -262,6 +264,7 @@ class ATM:
         for combination in combinations:
             if len(combination) < len(best):
                 best = combination
+            print(best)
             return {note: best.count(note) for note in set(best)}
 
 

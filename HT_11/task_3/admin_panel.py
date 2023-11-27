@@ -108,8 +108,9 @@ class AdminATM:
                                     (num_of_bills, denomination))
                         print(f"Successfully withdrawed {num_of_bills} bills of {denomination} UAH.")
                     else:
-                        print(f"Sorry but in ATM there are only {result[0]} {denomination} bills , choose next action:\n1<--------withdraw all "
-                              f"bills of this denomination \n2<--------change amount")
+                        print(
+                            f"Sorry but in ATM there are only {result[0]} {denomination} bills , choose next action:\n1<--------withdraw all "
+                            f"bills of this denomination \n2<--------change amount")
                         decision = input("Enter your action:")
                         if decision == "1":
                             cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
