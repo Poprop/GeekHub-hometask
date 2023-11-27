@@ -206,18 +206,17 @@ class ATM:
                     amount = amount - (amount % 10)
 
                     combinations = self.generate_combinations(amount, self.denominations,
-                                                                  self.check_denominations())
+                                                              self.check_denominations())
                     best_combination = self.best_combination(combinations)
-                    
 
                     if best_combination is not None:
                         print(best_combination)
                         for denomination, count in best_combination.items():
                             cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
-                                            (count, denomination))
+                                        (count, denomination))
 
                         cur.execute("UPDATE balances SET balance = balance - ? WHERE users_id = ?",
-                                        (amount, self.current_user))
+                                    (amount, self.current_user))
 
                         print(f"From your account, {amount} UAH was successfully withdrawn. Your bills:")
                         for denomination, count in best_combination.items():
@@ -238,9 +237,12 @@ class ATM:
             cur.execute("""SELECT * FROM bills_inventory""")
             rows = cur.fetchall()
             res = {row[1]: row[2] for row in rows}
+            print(f"Available denim is {res}")
             return res
 
-    def generate_combinations(self, amount, denomination, den_quantity, current_combination=None):
+    def generate_combinations(self, amount: int, denomination: list, den_quantity: dict,
+                              current_combination=None) -> list:
+        print(f"amount - {amount} , denom - {denomination} , den_quant - {den_quantity}")
         if current_combination is None:
             current_combination = []
         if amount == 0:
@@ -257,15 +259,15 @@ class ATM:
 
         return combinations
 
-    def best_combination(self, combinations):
+    def best_combination(self, combinations: list) -> dict:
         if len(combinations) == 0:
             return {}
         best = combinations[0]
         for combination in combinations:
             if len(combination) < len(best):
                 best = combination
-            print(best)
-            return {note: best.count(note) for note in set(best)}
+        print(best)
+        return {note: best.count(note) for note in set(best)}
 
 
 def get_integer_input(prompt):
