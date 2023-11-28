@@ -6,6 +6,7 @@ import sqlite3
 from db_initiation import create_tables
 from admin_panel import AdminATM
 from random import randint
+from collections import Counter
 
 
 class ATM:
@@ -185,6 +186,51 @@ class ATM:
             else:
                 return False
 
+    # def withdraw(self):
+    #     with self.conn:
+    #         try:
+    #             amount = get_integer_input("Enter the amount of withdrawal: ")
+    #         except ValueError:
+    #             print("Invalid input. Please enter a valid number.")
+    #             return
+    # 
+    #         cur = self.conn.cursor()
+    #         cur.execute("SELECT balance FROM balances WHERE users_id = ?", (self.current_user,))
+    #         result = cur.fetchone()
+    # 
+    #         if result is not None and result[0] >= amount:
+    #             if amount <= self.admin_atm.check_total_bank_for_user_funks():
+    #                 if amount % 10 != 0:
+    #                     print(
+    #                         f"Sorry but there is no opportunity to give you {amount - (amount % 10)} in cash due to \n"
+    #                         f"ATM can give a minimal nominal - 10 UAH")
+    #                 amount = amount - (amount % 10)
+    # 
+    #                 combinations = self.generate_combinations(amount, self.denominations,
+    #                                                           self.check_denominations())
+    #                 best_combination = self.best_combination(combinations)
+    # 
+    #                 if best_combination is not None and best_combination:
+    #                     print(best_combination)
+    #                     for denomination, count in best_combination.items():
+    #                         cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
+    #                                     (count, denomination))
+    # 
+    #                     cur.execute("UPDATE balances SET balance = balance - ? WHERE users_id = ?",
+    #                                 (amount, self.current_user))
+    # 
+    #                     print(f"From your account, {amount} UAH was successfully withdrawn. Your bills:")
+    #                     for denomination, count in best_combination.items():
+    #                         print(f"{denomination} x {count}")
+    # 
+    #                     self.save_transaction(self.current_user, 'Withdrawal', amount, self.check_balance())
+    #                 else:
+    #                     print("Insufficient funds in the ATM.")
+    # 
+    #             else:
+    #                 print("There is not enough money in the ATM")
+    #         else:
+    #             print("There is not enough money in your balance")
     def withdraw(self):
         with self.conn:
             try:
@@ -204,27 +250,32 @@ class ATM:
                             f"Sorry but there is no opportunity to give you {amount - (amount % 10)} in cash due to \n"
                             f"ATM can give a minimal nominal - 10 UAH")
                     amount = amount - (amount % 10)
-
-                    combinations = self.generate_combinations(amount, self.denominations,
-                                                              self.check_denominations())
-                    best_combination = self.best_combination(combinations)
-
-                    if best_combination is not None:
-                        print(best_combination)
-                        for denomination, count in best_combination.items():
-                            cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
-                                        (count, denomination))
-
-                        cur.execute("UPDATE balances SET balance = balance - ? WHERE users_id = ?",
-                                    (amount, self.current_user))
-
-                        print(f"From your account, {amount} UAH was successfully withdrawn. Your bills:")
-                        for denomination, count in best_combination.items():
-                            print(f"{denomination} x {count}")
-
+                    greedy = self.greedy_update_bill_inventory(amount)
+                    if greedy is not None and greedy:
+                        print(greedy)
                         self.save_transaction(self.current_user, 'Withdrawal', amount, self.check_balance())
                     else:
-                        print("Insufficient funds in the ATM.")
+
+                        combinations = self.generate_combinations(amount, self.denominations,
+                                                                  self.check_denominations())
+                        best_combination = self.best_combination(combinations)
+
+                        if best_combination is not None and best_combination:
+                            print(best_combination)
+                            for denomination, count in best_combination.items():
+                                cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
+                                            (count, denomination))
+
+                            cur.execute("UPDATE balances SET balance = balance - ? WHERE users_id = ?",
+                                        (amount, self.current_user))
+
+                            print(f"From your account, {amount} UAH was successfully withdrawn. Your bills:")
+                            for denomination, count in best_combination.items():
+                                print(f"{denomination} x {count}")
+
+                            self.save_transaction(self.current_user, 'Withdrawal', amount, self.check_balance())
+                        else:
+                            print("Insufficient funds in the ATM.")
 
                 else:
                     print("There is not enough money in the ATM")
@@ -237,12 +288,11 @@ class ATM:
             cur.execute("""SELECT * FROM bills_inventory""")
             rows = cur.fetchall()
             res = {row[1]: row[2] for row in rows}
-            print(f"Available denim is {res}")
             return res
 
     def generate_combinations(self, amount: int, denomination: list, den_quantity: dict,
                               current_combination=None) -> list:
-        print(f"amount - {amount} , denom - {denomination} , den_quant - {den_quantity}")
+        # print(f"amount - {amount} , denom - {denomination} , den_quant - {den_quantity}")
         if current_combination is None:
             current_combination = []
         if amount == 0:
@@ -259,6 +309,37 @@ class ATM:
 
         return combinations
 
+    def greedy_update_bill_inventory(self, amount:int):
+        with self.conn:
+            cur = self.conn.cursor()
+            cur.execute("""SELECT * FROM bills_inventory""")
+            rows = cur.fetchall()
+            current_inventory = {row[1]: row[2] for row in rows}
+            withdrawn_bills = Counter()
+            income_amount = amount
+
+            for bill in sorted(current_inventory.keys(), reverse=True):
+                while amount >= bill and current_inventory[bill] > 0:
+                    current_inventory[bill] -= 1
+                    amount -= bill
+                    withdrawn_bills[bill] += 1
+            if amount == 0:
+                update_values = [(current_inventory[bill], bill) for bill in
+                                 sorted(current_inventory.keys(), reverse=True)]
+                print(f"From your account, {income_amount} UAH was successfully withdrawn. Your bills:")
+                for bill, quant in withdrawn_bills.items():
+                    print(f"{bill} x {quant}")
+                for value in update_values:
+                    cur.execute("""
+                        UPDATE bills_inventory
+                        SET quantity = ?
+                        WHERE nominal = ?
+                    """, value)
+
+            else:
+                print("There are no possibility to withdraw necessary value by greedy algorythm")
+                return {}
+
     def best_combination(self, combinations: list) -> dict:
         if len(combinations) == 0:
             return {}
@@ -266,7 +347,6 @@ class ATM:
         for combination in combinations:
             if len(combination) < len(best):
                 best = combination
-        print(best)
         return {note: best.count(note) for note in set(best)}
 
 
