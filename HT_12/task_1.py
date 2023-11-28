@@ -255,6 +255,7 @@ class ATM:
                         print(greedy)
                         self.save_transaction(self.current_user, 'Withdrawal', amount, self.check_balance())
                     else:
+                        print("Need some more time for trying make withdraw in another way...")
 
                         combinations = self.generate_combinations(amount, self.denominations,
                                                                   self.check_denominations())
