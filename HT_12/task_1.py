@@ -254,6 +254,7 @@ class ATM:
                     if greedy is not None and greedy:
                         print(greedy)
                         self.save_transaction(self.current_user, 'Withdrawal', amount, self.check_balance())
+
                     else:
                         print("Need some more time for trying make withdraw in another way...")
 
@@ -261,8 +262,8 @@ class ATM:
                                                                   self.check_denominations())
                         best_combination = self.best_combination(combinations)
 
-                        if best_combination is not None and best_combination:
-                            print(best_combination)
+                        if best_combination:
+
                             for denomination, count in best_combination.items():
                                 cur.execute("""UPDATE bills_inventory SET quantity = quantity - ? WHERE nominal = ?""",
                                             (count, denomination))
@@ -310,7 +311,7 @@ class ATM:
 
         return combinations
 
-    def greedy_update_bill_inventory(self, amount:int):
+    def greedy_update_bill_inventory(self, amount: int):
         with self.conn:
             cur = self.conn.cursor()
             cur.execute("""SELECT * FROM bills_inventory""")
@@ -336,10 +337,11 @@ class ATM:
                         SET quantity = ?
                         WHERE nominal = ?
                     """, value)
+                return True
 
             else:
                 print("There are no possibility to withdraw necessary value by greedy algorythm")
-                return {}
+                return False
 
     def best_combination(self, combinations: list) -> dict:
         if len(combinations) == 0:
