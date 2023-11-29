@@ -251,6 +251,8 @@ class ATM:
                             f"ATM can give a minimal nominal - 10 UAH")
                     amount = amount - (amount % 10)
                     greedy = self.greedy_update_bill_inventory(amount)
+                    cur.execute("UPDATE balances SET balance = balance - ? WHERE users_id = ?",
+                                (amount, self.current_user))
                     if greedy is not None and greedy:
                         print(greedy)
                         self.save_transaction(self.current_user, 'Withdrawal', amount, self.check_balance())
