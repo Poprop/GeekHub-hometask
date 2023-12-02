@@ -9,7 +9,7 @@ from db_initiation import create_tables
 from admin_panel import AdminATM
 from random import randint
 from collections import Counter
-from HT_14.task_1.curentexchange import *
+from HT_14.task_1.curentexchange import currently_exchange_rate
 
 
 class ATM:
@@ -88,8 +88,8 @@ class ATM:
                 break
 
     def currency_exchange(self):
-        print("Available currency is : UAH , USD , EUR\nPlease enter bellow what currency you interested in")
-        available = ["UAH", "USD", "EUR"]
+        print("Available currency is : UAH , USD , EUR , PLN\nPlease enter bellow what currency you interested in")
+        available = ["UAH", "USD", "EUR", "PLN"]
         what_you_have = None
         what_want_buy = None
         while what_you_have is None:
@@ -104,11 +104,11 @@ class ATM:
             try:
                 what_want_buy: str = (input("What currency you want to buy: ")).upper()
                 if what_want_buy not in available:
-                    what_want_buy=None
+                    what_want_buy = None
                     raise ValueError('You can use only available currency')
             except Exception as e:
                 print(e)
-        print(exchangeRate(target_currency=what_you_have, base_currency=what_want_buy))
+        print(currently_exchange_rate(target_currency=what_you_have, base_currency=what_want_buy))
 
     def add_account(self):
         print("You enter the new account menu, please enter information for registration")
