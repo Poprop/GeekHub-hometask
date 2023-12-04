@@ -10,10 +10,13 @@ import pandas as pd
 
 
 class Parser:
+    headers_created = False
     def __init__(self, address):
         self.address = address
-        self.author_text = ["text"]
-        self.authors = ["author"]
+        self.author_text = []
+        self.authors = []
+        self.author_bio_frame = []
+
 
     def author_text_parser(self) -> None:
         response = requests.get(self.address)
@@ -34,37 +37,51 @@ class Parser:
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, "html.parser")
             authors = soup.find_all('small', {'class': 'author'})
+
             for author in authors:
                 span = author.parent
-                link_element = self.address + (span.find("a")["href"])
+                bio_address = "https://quotes.toscrape.com/"
+                link_element = bio_address + (span.find("a")["href"])
                 bio_response = requests.get(link_element)
                 bio_soup = BeautifulSoup(bio_response.content, "html.parser")
 
-                name = bio_soup.find("h3", class_="author-title").text.strip()
-                birthdate = bio_soup.find("span", class_="author-born-date").text.strip()
-                born_location = bio_soup.find("span", class_="author-born-location").text.strip()
-                description = bio_soup.find("div", class_="author-description").text.strip()
-                df = pd.DataFrame({"Author bio": [
-                    f'Name:{name},Birthday:{birthdate},Born Location:{born_location},Description:{description}']})
-                df_existing = pd.read_csv("Authors&text.csv")
-                df_existing = pd.concat([df_existing, df], ignore_index=True)
-                df_existing.to_csv('Authors&text.csv', index=False, quoting=csv.QUOTE_NONNUMERIC)
-            return df_existing
+                name_element = bio_soup.find("h3", class_="author-title")
+                name = name_element.text.strip() if name_element else "N/A"
+                birthdate_element = bio_soup.find("span", class_="author-born-date")
+                birthdate = birthdate_element.text.strip() if birthdate_element else "N/A"
+                born_element = bio_soup.find("span", class_="author-born-location")
+                born_location = born_element.text.strip() if born_element else "N/A"
+                description_element = bio_soup.find("div", class_="author-description")
+                description = description_element.text.strip() if description_element else "N/A"
+
+                author_data = f'Name: {name}\nBirthday: {birthdate}\nBorn Location: {born_location}\nDescription: {description}'
+
+                self.author_bio_frame.append(author_data)
         else:
             print(f"Unable to get page, status code: {response.status_code}")
-            return pd.DataFrame
+            return pd.DataFrame()
 
     def make_csv(self) -> None:
-        with open("Authors&text.csv", "w", newline="", encoding="utf-8") as csv_file:
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerows(zip(self.author_text, self.authors))
+        with open("Authors&text.csv", "a", newline="", encoding="utf-8") as csv_file:
+            fields = ["Text", "Name", "Bio"]
+            writer = csv.DictWriter(csv_file, fieldnames=fields)
+
+            if not Parser.headers_created:
+                writer.writeheader()
+                Parser.headers_created = True
+
+            for text, author, bio in zip(self.author_text, self.authors, self.author_bio_frame):
+                writer.writerow({"Text": text,
+                                 "Name": author,
+                                 "Bio": bio})
 
 
 if __name__ == "__main__":
-    link = "http://quotes.toscrape.com/"
-    parser = Parser(address=link)
-    parser.author_text_parser()
-    parser.author_info_parser()
-    parser.make_csv()
-    df_result = parser.about_author_info_parser()
-    print(df_result)
+    page_amount = int(input("enter amount of pages: "))
+    for page_num in range(1, page_amount + 1):
+        link = f"https://quotes.toscrape.com/page/{str(page_num)}/"
+        parser = Parser(address=link)
+        parser.author_text_parser()
+        parser.author_info_parser()
+        parser.about_author_info_parser()
+        parser.make_csv()
