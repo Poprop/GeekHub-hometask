@@ -1,4 +1,3 @@
-
 import csv
 import json
 import requests
@@ -22,10 +21,11 @@ def sears_parser(product_url: str) -> csv:
     if match:
         group_id = match.group(1)
         print(group_id)
-    url = (f"https://www.sears.com/api/sal/v3/products/search?startIndex=1&endIndex=48&searchType=category&catalogId=12605&"
-       f"store=Sears&storeId=10153&zipCode=10101&bratRedirectInd=true&catPredictionInd=true&disableBundleInd=true&filterValueLimit=500&"
-       f"includeFiltersInd=true&shipOrDelivery=true&solrxcatRedirection=true&sortBy=ORIGINAL_SORT_ORDER&whiteList"
-       f"CacheLoad=false&eagerCacheLoad=true&slimResponseInd=true&catGroupId={group_id}&seoURLPath={url_slice}")
+    url = (
+        f"https://www.sears.com/api/sal/v3/products/search?startIndex=1&endIndex=48&searchType=category&catalogId=12605&"
+        f"store=Sears&storeId=10153&zipCode=10101&bratRedirectInd=true&catPredictionInd=true&disableBundleInd=true&filterValueLimit=500&"
+        f"includeFiltersInd=true&shipOrDelivery=true&solrxcatRedirection=true&sortBy=ORIGINAL_SORT_ORDER&whiteList"
+        f"CacheLoad=false&eagerCacheLoad=true&slimResponseInd=true&catGroupId={group_id}&seoURLPath={url_slice}")
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Encoding': '*',
@@ -41,7 +41,6 @@ def sears_parser(product_url: str) -> csv:
     print(response.status_code)
 
     data = response.json()
-
 
     with open(f"scv_file_{group_id}.csv", "w", newline="", encoding="utf-8") as csv_file:
         header = ["Item name", "Brand name", "Price", "Raiting", "Category"]
@@ -61,6 +60,7 @@ def sears_parser(product_url: str) -> csv:
                                  "Raiting": rating,
                                  "Category": category})
 
-# url = input("Ctrl+C and Ctrl + V ")
-url="https://www.sears.com/tools/b-1020000?adcell=hp_CatLink_Tools"
+
+url = input("Ctrl+C and Ctrl + V : ")
+
 print(sears_parser(url))
