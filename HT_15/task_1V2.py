@@ -64,3 +64,5 @@ def sears_parser(product_url: str) -> csv:
 url = input("Ctrl+C and Ctrl + V : ")
 
 print(sears_parser(url))
+
+
