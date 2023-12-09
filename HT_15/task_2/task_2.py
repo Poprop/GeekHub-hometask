@@ -6,11 +6,7 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
 DOMAINS_FILE = "domains.csv"
-BASE_URL = "https://member.expireddomains.net/domains/combinedexpired/"
-WAIT_TIME = 5
-
-
-
+WAIT_TIME = 20
 
 
 def get_data(url, params=None, headers=None):
@@ -36,20 +32,18 @@ def write_to_csv(data):
 
 
 def find_info():
+    items_count = 25
     while True:
-        page_content = get_data(BASE_URL)
+
+        page_content = get_data(f"https://www.expireddomains.net/expired-domains/?start={items_count}#listing")
 
         soup = BeautifulSoup(page_content, features="html.parser")
         rows = soup.find_all("td", class_="field_domain")
         domain_text_list = [row.text for row in rows]
 
         write_to_csv(domain_text_list)
-
-        next_page = soup.find("a", class_="next")
-        if not next_page:
-            print("Збір даних завершено!")
-            break
-
+        print(f"I`m working ,already added {items_count} dommains")
+        items_count += len(domain_text_list)
         time.sleep(WAIT_TIME)
 
 
