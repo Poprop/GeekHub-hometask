@@ -92,7 +92,7 @@ class Robot:
             time.sleep(10)
             print('тіло створено')
         except NoSuchElementException as e:
-            if 0 < int(self.body) <= 6:
+            if not (0 < int(self.body) <= 6):
                 print("wrong value of body type")
             else:
                 print(f"Element not found: {e}")
@@ -143,19 +143,6 @@ class Robot:
 
     def save_image(self):
         dir = f"D:\Python study\GeekHub hometask\HT_16\output\screen_{self.receipt}.png"
-        # photo_save = self.driver.find_element(By.ID, "robot-preview-image")
-        # photo = self.driver.get_screenshot_as_png()
-        #
-        # location = photo_save.location
-        # size = photo_save.size
-        #
-        # photo = Image.open(BytesIO(photo))
-        # photo = photo.crop(
-        #     (location['x'], location['y'], location['x'] + size['width'], location['y'] + size['height']))
-        #
-        # photo.save(dir)
-        # time.sleep(10)
-        # print("створено фото і збережено")
         head_img_url = self.driver.find_element(By.XPATH, '//img[@alt="Head"]').get_attribute('src')
         body_img_url = self.driver.find_element(By.XPATH, '//img[@alt="Body"]').get_attribute('src')
         legs_img_url = self.driver.find_element(By.XPATH, '//img[@alt="Legs"]').get_attribute('src')
