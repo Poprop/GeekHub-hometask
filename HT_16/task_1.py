@@ -92,7 +92,7 @@ class Robot:
             time.sleep(10)
             print('тіло створено')
         except NoSuchElementException as e:
-            if not (0 < int(self.body) <= 6):
+            if 0 < int(self.body) <= 6:
                 print("wrong value of body type")
             else:
                 print(f"Element not found: {e}")
