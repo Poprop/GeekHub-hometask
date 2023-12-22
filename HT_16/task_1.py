@@ -35,15 +35,17 @@ class Robot:
     def site_initiation(self):
         try:
             self.driver.get(url=self.url)
-            order_button = self.driver.find_element(By.XPATH, "/html/body/div/header/div/ul/li[2]/a").click()
-
-            time.sleep(2)
+            # order_button = self.driver.find_element(By.XPATH, "/html/body/div/header/div/ul/li[2]/a").click()
+            order_button = WebDriverWait(self.driver, 5).until(
+                EC.element_to_be_clickable((By.XPATH, "/html/body/div/header/div/ul/li[2]/a"))
+            )
+            order_button.click()
             print("Button is cliked")
             try:
-                extra_button = self.driver.find_element(By.XPATH,
-                                                        "/html/body/div/div/div[2]/div/div/div/div/div/button[2]")
+                extra_button = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH,
+                                                    "/html/body/div/div/div[2]/div/div/div/div/div/button[2]"))
+                )
                 extra_button.click()
-                time.sleep(5)
                 print("Extra button clicked")
             except Exception as e:
                 print("Extra button not found:", e)
@@ -80,16 +82,15 @@ class Robot:
                          "6": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[7]"}
         head_select = self.driver.find_element(By.XPATH, head_button)
         head_select.click()
-        head_option = self.driver.find_element(By.XPATH, head_elements[self.head])
+        head_option = WebDriverWait(self.driver,5).until(EC.element_to_be_clickable((By.XPATH, head_elements[self.head])))
         head_option.click()
-        time.sleep(10)
         print("голову створено")
 
     def body_choose(self):
         try:
             body_button = self.driver.find_element(By.ID, f"id-body-{self.body}")
             body_button.click()
-            time.sleep(10)
+            time.sleep(5)
             print('тіло створено')
         except NoSuchElementException as e:
             if not (0 < int(self.body) <= 6):
@@ -99,9 +100,11 @@ class Robot:
 
     def legs_and_ship_info(self):
         legs_element = self.legs
-        legs_input = self.driver.find_element(By.CSS_SELECTOR, '.form-control[type="number"][min="1"][max="6"]')
+        # legs_input = self.driver.find_element(By.CSS_SELECTOR, '.form-control[type="number"][min="1"][max="6"]')
+        legs_input = WebDriverWait(self.driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.form-control[type="number"][min="1"][max="6"]')))
         self.driver.execute_script("arguments[0].scrollIntoView(true);", legs_input)
-        time.sleep(4)
+        # time.sleep(4)
         legs_input.clear()
         legs_input.send_keys(legs_element)
 
@@ -115,9 +118,10 @@ class Robot:
     def process_order(self):
         while True:
             # Scroll to and click the order button
-            order_button = self.driver.find_element(By.CSS_SELECTOR, "button#order.btn.btn-primary")
+            # order_button = self.driver.find_element(By.CSS_SELECTOR, "button#order.btn.btn-primary")
+            order_button = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "button#order.btn.btn-primary")))
             self.driver.execute_script("arguments[0].scrollIntoView(true);", order_button)
-            time.sleep(10)
             order_button.click()
 
             # Check if the order was successful
