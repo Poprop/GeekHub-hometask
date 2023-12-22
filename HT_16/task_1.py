@@ -13,6 +13,7 @@ from typing import Tuple
 import requests
 import csv
 from io import StringIO
+from selenium.webdriver.support.select import Select
 
 
 class Robot:
@@ -43,8 +44,8 @@ class Robot:
             print("Button is cliked")
             try:
                 extra_button = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH,
-                                                    "/html/body/div/div/div[2]/div/div/div/div/div/button[2]"))
-                )
+                                                                                               "/html/body/div/div/div[2]/div/div/div/div/div/button[2]"))
+                                                                   )
                 extra_button.click()
                 print("Extra button clicked")
             except Exception as e:
@@ -72,18 +73,13 @@ class Robot:
         if is_click:
             element.click()
 
+
+
     def head_choose(self):
         head_button = "/html/body/div/div/div[1]/div/div[1]/form/div[1]/select"
-        head_elements = {"1": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[2]",
-                         "2": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[3]",
-                         "3": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[4]",
-                         "4": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[5]",
-                         "5": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[6]",
-                         "6": r"/html/body/div/div/div[1]/div/div[1]/form/div[1]/select/option[7]"}
         head_select = self.driver.find_element(By.XPATH, head_button)
         head_select.click()
-        head_option = WebDriverWait(self.driver,5).until(EC.element_to_be_clickable((By.XPATH, head_elements[self.head])))
-        head_option.click()
+        Select(head_select).select_by_value(self.head)
         print("голову створено")
 
     def body_choose(self):
@@ -116,12 +112,20 @@ class Robot:
         print("дані доставки і ноги обрану")
 
     def process_order(self):
+        # while True:
+        #     # Scroll to and click the order button
+        #     # order_button = self.driver.find_element(By.CSS_SELECTOR, "button#order.btn.btn-primary")
+        #     order_button = WebDriverWait(self.driver, 5).until(
+        #         EC.presence_of_element_located((By.CSS_SELECTOR, "button#order.btn.btn-primary")))
+        #     self.driver.execute_script("arguments[0].scrollIntoView(true);", order_button)
+        #     order_button.click()
+        """Сорі , але з тайм сліп тут код не валиться , на відміну від WebDriveWait , не можу пояснити чому , проте , чомусь
+        логіка скролінгу в такому випадку не відпрацьовує"""
         while True:
             # Scroll to and click the order button
-            # order_button = self.driver.find_element(By.CSS_SELECTOR, "button#order.btn.btn-primary")
-            order_button = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "button#order.btn.btn-primary")))
+            order_button = self.driver.find_element(By.CSS_SELECTOR, "button#order.btn.btn-primary")
             self.driver.execute_script("arguments[0].scrollIntoView(true);", order_button)
+            time.sleep(10)
             order_button.click()
 
             # Check if the order was successful
