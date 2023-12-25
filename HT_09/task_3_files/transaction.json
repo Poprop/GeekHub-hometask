@@ -1,6 +1,6 @@
 {
-    "User_name": "Vasia",
-    "Transaction_purpose": "Deposit",
-    "Amount": 500,
-    "Account balance": 10000
+    "User_name": null,
+    "Transaction_purpose": null,
+    "Amount": null,
+    "Account balance": null
 }

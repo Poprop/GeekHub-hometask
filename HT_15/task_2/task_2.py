@@ -39,6 +39,7 @@ def find_info():
 
         soup = BeautifulSoup(page_content, features="html.parser")
         rows = soup.find_all("td", class_="field_domain")
+        print(rows)
         domain_text_list = [row.text for row in rows]
 
         write_to_csv(domain_text_list)

@@ -6,35 +6,16 @@ from pprint import pprint
 from bs4 import BeautifulSoup
 import time
 
-url = "https://www.expireddomains.net/expired-domains/"
+url = "https://www.expireddomains.net/expired-domains/?start=25#listing"
 csv_name = "dommains2.csv"
 target_url = "https://member.expireddomains.net/domains/combinedexpired/"
-user=fake_useragent.UserAgent().random
+user = fake_useragent.UserAgent().random
 
-def login():
-    login_data = {
-        "login": "Poprop",
-        "password": f"655959Qq"
-    }
-    login_url = "https://www.expireddomains.net/login/"
-    with requests.Session() as session:
-        logining = session.post(login_url, data=login_data)
-        if 'Welcome' in logining.text:
-            print('Успішний вхід!')
 
-            target_responce = session.get(target_url)
-            print(target_responce.status_code)
-            print(target_responce.text)
 
 
 def get_data(url=url):
-    login_data = {
-        "login": "Poprop",
-        "password": f"655959Qq"
-    }
-    login_url = "https://www.expireddomains.net/login/"
     headers = {"User-Agent": UserAgent().random}
-    responce=requests.post(login_url,login_data,headers=headers)
     response = requests.get(url, headers)
     print(response.status_code)
     print(response.text)
@@ -53,9 +34,9 @@ def make_csv(data):
 
 
 def get_info():
+    start = 25
     while True:
-        content = get_data(url)
-
+        content = get_data(f"https://www.expireddomains.net/expired-domains/?start={start}#listing")
         soup = BeautifulSoup(content, features="html.parser")
         domains = soup.find_all("td", class_="field_domain")
         prices = soup.find_all("td", class_="field_price")
@@ -69,8 +50,8 @@ def get_info():
         if not next_page:
             print("That`s all")
             break
-
-        time.sleep(5)
+        start += 25
+        time.sleep(20)
 
 
 print(get_info())

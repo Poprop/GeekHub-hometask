@@ -22,5 +22,5 @@ class CustomList(list):
 
 if __name__ == "__main__":
     list_1 = CustomList(10, 15, 20, 12, 15)
-    list_1[0] = 5
+    list_1[1] = 5
     print(list_1)
